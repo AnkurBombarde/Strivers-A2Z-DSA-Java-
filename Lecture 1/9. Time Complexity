@@ -1,0 +1,3 @@
+Time complexity: 
+
+The rate at which the time, required to run a code, changes with respect to the input size, is considered the time complexity. Basically, the time complexity of a particular code depends on the given input size, not on the machine used to run the code.
