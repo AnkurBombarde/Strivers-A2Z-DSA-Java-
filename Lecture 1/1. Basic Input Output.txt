@@ -8,9 +8,7 @@
 -> Following below is the sample code for basic input and output 
  */
 
-/**
- * Main
- */
+
 /* 
 import java.util.Scanner;
 public class Main {
