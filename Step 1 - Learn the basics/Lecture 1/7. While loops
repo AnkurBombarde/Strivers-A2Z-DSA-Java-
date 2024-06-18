@@ -1,0 +1,88 @@
+A while loop is a control structure in programming that repeatedly executes a block of code as long as a specified condition remains true. A "while" loop will not execute the code at all if the initial condition is false. It relies on the condition being true from the outset for any code execution to occur.
+
+A while loop follows a simple sequence of steps:
+
+Evaluation of Test Expression: The loop begins by evaluating a test expression.
+Condition Check: If the test expression is true, the code inside the loop's body is executed.
+Re-evaluation: After executing the code, the test expression is evaluated again.
+Continuation or Termination: This process continues until the test expression becomes false, at which point the while loop terminates.
+
+Syntax
+
+while (condition) {
+    // body of the loop
+}
+
+example of while loop:
+
+public class Main {
+    public static void main(String[] args) {
+        int n = 5;
+        int factorial = 1;
+
+        while (n > 0) {
+            factorial *= n;
+            n--;
+        }
+
+        System.out.println("Factorial of 5 is: " + factorial);
+    }
+}
+
+Output: Factorial of 5 is: 120
+
+Optimisation:
+
+Optimising while loops involves making them more efficient by minimising unnecessary iterations. One common optimization technique is to use loop control statements like break or continue within the loop body.
+
+Break: It allows you to exit the loop prematurely, even before the termination condition is met. For example, if you're searching for a value in an array, once you find it, you can break out of the loop instead of continuing to search through the remaining elements.
+
+Continue: It skips the current iteration of the loop and moves to the next one. This can be useful when you want to skip certain elements or avoid executing some code under specific conditions.
+
+By using these control statements judiciously, you can reduce the number of iterations, which can significantly improve the efficiency of your algorithm.
+
+Termination Conditions:
+
+In algorithm design, it's essential to define clear and well-defined termination conditions for while loops. The termination condition specifies when the loop should stop executing. Without proper termination conditions, a while loop can run indefinitely, leading to what's known as an "infinite loop." Infinite loops can crash programs and consume excessive system resources, making them a critical issue to avoid.
+
+public class LoopOptimizationExample {
+    public static void main(String[] args) {
+        int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int target = 6;
+
+        // Using 'break' to exit the loop early when the target is found
+        for (int num : numbers) {
+            if (num == target) {
+                System.out.println("Target found: " + target);
+                break; // Exit the loop immediately
+            }
+            System.out.println("Checking: " + num);
+        }
+
+        // Using 'continue' to skip specific elements
+        for (int num : numbers) {
+            if (num % 2 == 0) {
+                continue; // Skip even numbers
+            }
+            System.out.println("Odd number: " + num);
+        }
+    }
+}
+Output:
+
+Checking: 1
+Checking: 2
+Checking: 3
+Checking: 4
+Checking: 5
+Target found: 6
+Odd number: 1
+Odd number: 3
+Odd number: 5
+Odd number: 7
+Odd number: 9
+
+Need: Unlike the for loop, which has a fixed number of iterations, the while loop allows dynamic iteration
+It continues executing as long as a specified condition remains true.
+The while loop executes its block of code only if the specified condition evaluates to true.
+It’s ideal for scenarios where you want to repeat an action while a certain condition holds.

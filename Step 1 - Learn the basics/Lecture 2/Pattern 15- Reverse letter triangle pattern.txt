@@ -1,0 +1,47 @@
+Input Format: N = 3
+Result: 
+A B C
+A B
+A
+
+Input Format: N = 6
+Result:   
+A B C D E F
+A B C D E 
+A B C D
+A B C
+A B
+A
+
+This pattern problem is very similar to the last pattern problem we did where we had to print an increasing letter pyramid pattern but this time we have to print it in the reverse fashion. So, the outer loop will run for N rows and the inner loop will loop for N-i-1 alphabets in each row (where i is the row number) because the 1st row will have alphabets from A to A+(N-1). Alphabets in each row will start from A each time we enter a new row and will loop till (A+N-i-1)th alphabet in that row. In this way, the last row will only contain the alphabet A at last.
+
+class Main {
+   
+   static void pattern15(int N)
+{
+     
+      // Outer loop for the number of rows.
+      for(int i=0;i<N;i++){
+          
+          // Inner loop will loop for i times and
+          // print alphabets from A to A + (N-i-1).
+          for(char ch = 'A'; ch<='A'+(N-i-1);ch++){
+              System.out.print(ch + " ");
+              
+          }
+          // As soon as the letters for each iteration are printed, we move to the
+          // next row and give a line break otherwise all letters
+          // would get printed in 1 line.
+          System.out.println();
+         
+      }
+}
+
+    public static void main(String[] args) {
+        
+        // Here, we have taken the value of N as 5.
+        // We can also take input from the user.
+        int N = 5;
+        pattern15(N);
+    }
+}
