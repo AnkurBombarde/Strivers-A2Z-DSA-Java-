@@ -1,0 +1,98 @@
+Problem Statement: Given an integer N, return true if it is a palindrome else return false.
+
+Definition: A Palindrome is a number that reads the same backward as forward. For example 121, 1331, 4554 are palindrome because they remain the same when their digits are reversed
+
+
+Example 1:
+Input:N = 4554
+Output:Palindrome Number
+
+Example 2:
+Input:N = 7789
+Output: Not Palindrome
+
+
+Algorithm: 
+Step 1:Initialise an integer revNum to 0. This variable will store the reverse of the number.
+
+Step 2: Make a duplicate of the original number and store it in an integer dup for later comparison.
+
+Step 3: Run a while loop with the condition n>0 to reverse the number and at each iteration:
+
+  Get the last digit of n by using the modulus operator % with 10 and store it in a temporary variable ld.
+  Update the revNum by multiplying it by 10 and adding the last digit ld.
+  Update n by integer division with 10 effectively removing the last digit.
+
+Step 4: After the loop, check if the original number dup is equal to the reversed number revNum.
+
+  If they are equal, return true indicating the number is a palindrome.
+  If they are not equal, return false indicating that the number is not a palindrome.
+
+
+  Code: 
+                              
+public class Main {
+
+    // Function to check if a given integer is a palindrome
+    static boolean palindrome(int n) {
+        // Initialize a variable to store the reverse of the number
+        int revNum = 0;
+        // Create a duplicate variable to store the original number
+        int dup = n;
+        // Iterate through each digit of the number until it becomes 0
+        while (n > 0) {
+            // Extract the last digit of the number
+            int ld = n % 10;
+            // Build the reverse number by appending the last digit
+            revNum = (revNum * 10) + ld;
+            // Remove the last digit from the original number
+            n = n / 10;
+        }
+        // Check if the original number is equal to its reverse
+        if (dup == revNum) {
+            // If equal, return true indicating it's a palindrome
+            return true;
+        } else {
+            // If not equal, return false indicating it's not a palindrome
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        int number = 4554;
+
+        if (palindrome(number)) {
+            System.out.println(number + " is a palindrome.");
+        } else {
+            System.out.println(number + " is not a palindrome.");
+        }
+    }
+}
+
+Approach:
+
+The approach used in this program involves reversing the given number and comparing the reversed number with the original number. Let's break down the approach:
+
+1. Initialization:
+
+Reverse Number: Initialize a variable (revNum) to store the reverse of the number, starting with 0.
+Duplicate Number: Store the original number (n) in another variable (dup) for comparison after the reversal process.
+
+2. Reversing the Number:
+
+Loop Until Number is Zero: Use a while loop that continues until n becomes 0.
+Extract Last Digit: Inside the loop, extract the last digit of n using the modulo operator (n % 10).
+Build Reversed Number: Construct the reversed number by multiplying the current revNum by 10 (shifting digits left) and adding the extracted last digit.
+Remove Last Digit: Update n by removing its last digit using integer division (n / 10).
+
+3. Comparison:
+
+After the loop, revNum contains the reversed number.
+Compare revNum with dup (the original number).
+If they are equal, the original number is a palindrome; otherwise, it is not.
+
+4. Result Output:
+
+Based on the result of the comparison, print whether the number is a palindrome.
+                            
+                        

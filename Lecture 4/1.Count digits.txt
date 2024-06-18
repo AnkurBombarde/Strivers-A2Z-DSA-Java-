@@ -1,0 +1,40 @@
+Problem Statement: Given an integer N, return the number of digits in N.
+
+
+
+Example 1:
+Input:N = 12345
+Output = 5
+
+Example 2:
+Input:N = 7789
+Output = 4
+
+
+
+import java.util.*;
+
+public class Main {
+   
+    // using logarithmic operation log10(n) + 1.
+    static int countDigits(int n) {
+       
+        int cnt = (int) (Math.log10(n) + 1);
+        return cnt;
+    }
+
+    public static void main(String[] args) {
+        int N = 329823;
+        System.out.println("N: " + N);
+        int digits = countDigits(N);
+        System.out.println("Number of Digits in N: " + digits);
+    }
+}
+
+The code uses logarithmic properties to determine the number of digits in N.
+Specifically, it calculates the base-10 logarithm of N and adds 1 to account for the case when N is a power of 10.
+The expression (int)(Math.log10(n) + 1) calculates the number of digits in N.
+Math.log10(n) computes the logarithm of N to the base 10.
+Adding 1 ensures that the count is correct even when N is a power of 10.
+Casting the result to an integer ensures that it is rounded down to the nearest whole number (since we’re interested in the count of digits).
+The final result is the count of digits in N.
