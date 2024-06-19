@@ -1,0 +1,150 @@
+Problem Statement:  Given an array of n integers, sort the array using the Quicksort method.
+
+Definition:
+Quick sort is a highly efficient and widely-used comparison-based sorting algorithm that employs the divide and conquer strategy. It works by selecting a 'pivot' element from the array and partitioning the other elements into two sub-arrays, according to whether they are less than or greater than the pivot. The sub-arrays are then sorted recursively. This process results in a sorted array.
+Following is the working of Quick sort:
+1. Choose a Pivot: Select an element from the array to be the pivot.
+A pivot is basically a chosen element of the given array. Various strategies can be used to choose the pivot, such as picking the first element, the last element, the middle element, or a random element.
+
+2. Partitioning: Rearrange the array elements so that all elements less than the pivot come before it, and all elements greater than the pivot come after it. The pivot is now in its final sorted position.
+
+3. Recursive Sort: Recursively apply the same process to the sub-arrays of elements less than and greater than the pivot.
+
+4. Combine: Since the sub-arrays are sorted in place, no combining step is needed. The entire array is now sorted.
+
+Example:
+Consider sorting the following array in ascending order: [10, 7, 8, 9, 1, 5].
+
+1. Initial Array: [10, 7, 8, 9, 1, 5]
+
+Choose a pivot (e.g., the last element, 5).
+
+2. Partitioning:
+
+Rearrange elements around the pivot (5).
+Result after partitioning: [1, 5, 8, 9, 10, 7]
+
+3. Recursive Calls:
+
+Apply quick sort to the sub-arrays [1] and [8, 9, 10, 7].
+
+4. Partition Sub-arrays:
+
+Choose new pivots for the sub-arrays and partition them.
+For [8, 9, 10, 7], choose pivot 7 and partition.
+Result after partitioning: [1, 5, 7, 9, 10, 8]
+
+5. Continue Recursively:
+
+Repeat the process for smaller sub-arrays until each sub-array has one or zero elements.
+
+Approach:
+Now, let’s understand how we are going to implement the logic of the above steps. In the intuition, we have seen that the given array should be broken down into subarrays. But while implementing, we are not going to break down and create any new arrays. Instead, we will specify the range of the subarrays using two indices or pointers(i.e. low pointer and high pointer) each time while breaking down the array.
+
+The algorithm steps are the following for the quickSort() function:
+
+1) Initially, the low points to the first index and the high points to the last index(as the range is n i.e. the size of the array). 
+2) After that, we will get the index(where the pivot should be placed after sorting) while shifting the smaller elements on the left and the larger ones on the right using a partition() function discussed later.
+3) Now, this index can be called the partition index as it creates a partition between the left and the right unsorted subarrays.
+4) After placing the pivot in the partition index(within the partition() function specified), we need to call the function quickSort() for the left and the right subarray recursively. So, the range of the left subarray will be [low to (partition index - 1)] and the range of the right subarray will be [(partition index + 1) to high]. 
+5) This is how the recursion will continue until the range becomes 1.
+
+Pseudocode:
+quickSort(arr, low, high){
+    if(low<high){
+        pIndex=partition(arr, low, high);
+        quickSort(arr, low, pIndex-1);
+        quickSort(arr, pIndex+1, high);
+    }
+}
+
+6) Inside the function, we will first select the pivot(i.e. arr[low] in our case).
+7) Now, we will again take two-pointers i and j. The i pointer points to low and the j points to high.
+8) Now, the pointer i will move forward and find the first element that is greater than the pivot. Similarly, the pointer j will move backward and find the first element that is smaller than the pivot.
+9) Here, we need to add some checks like i <= high-1 and j >= low+1. Because it might happen that i is standing at high and trying to proceed or j is standing at low and trying to exceed.
+10) Once we find such elements i.e. arr[i] > pivot and arr[j] < pivot, and i < j, we will swap arr[i] and arr[j].
+11) We will continue step 3 and step 4, until j becomes smaller than i.
+12) Finally, we will swap the pivot element(i.e. arr[low]) with arr[j] and will return the index j i.e. the partition index.
+
+Pseudocode:
+int partition(arr, low, high){
+    pivot=arr[low];
+    i=low;
+    j=high;
+    while(i<j){
+        while(arr[i]<=pivot && i<=high-1){
+            i++;
+        }
+
+        while(arr[j]>pivot && j>=low+1){
+            j--;
+        }
+        if(i<j){
+            swap(arr[i], arr[j])
+        }
+    }
+    swap(arr[low], arr[j]);
+    return j;
+}
+
+Code:
+import java.util.*;
+
+class Solution {
+    static int partition(List<Integer> arr, int low, int high) {
+        int pivot = arr.get(low);
+        int i = low;
+        int j = high;
+
+        while (i < j) {
+            while (arr.get(i) <= pivot && i <= high - 1) {
+                i++;
+            }
+
+            while (arr.get(j) > pivot && j >= low + 1) {
+                j--;
+            }
+            if (i < j) {
+                int temp = arr.get(i);
+                arr.set(i, arr.get(j));
+                arr.set(j, temp);
+            }
+        }
+        int temp = arr.get(low);
+        arr.set(low, arr.get(j));
+        arr.set(j, temp);
+        return j;
+    }
+
+    static void qs(List<Integer> arr, int low, int high) {
+        if (low < high) {
+            int pIndex = partition(arr, low, high);
+            qs(arr, low, pIndex - 1);
+            qs(arr, pIndex + 1, high);
+        }
+    }
+    public static List<Integer> quickSort(List<Integer> arr) {
+        qs(arr, 0, arr.size() - 1);
+        return arr;
+    }
+}
+
+public class Main {
+    public static void main(String args[]) {
+        List<Integer> arr = new ArrayList<>();
+        arr = Arrays.asList(new Integer[] {4, 6, 2, 5, 7, 9, 1, 3});
+        int n = arr.size();
+        System.out.println("Before Using insertion Sort: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr.get(i) + " ");
+        }
+        System.out.println();
+        arr = Solution.quickSort(arr);
+        System.out.println("After insertion sort: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr.get(i) + " ");
+        }
+        System.out.println();
+    }
+
+} 

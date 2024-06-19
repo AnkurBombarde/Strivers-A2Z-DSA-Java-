@@ -1,0 +1,94 @@
+Problem Statement: Given an array of N integers, write a program to implement the Insertion sorting algorithm.
+
+Definition: Insertion sort is a simple and intuitive comparison-based sorting algorithm. It builds the sorted array (or list) one item at a time by repeatedly taking the next unsorted item and inserting it into its correct position within the sorted portion.
+Following are the steps for insertion sort:
+
+1. Start with the First Element: Assume the first element is already sorted. Consider this as a sorted sublist of one element.
+
+2. Select the Next Element: Take the next element from the unsorted portion of the list.
+
+3. Find the Correct Position: Compare the selected element with the elements in the sorted sublist (moving from right to left) to find its correct position.
+
+4. Shift Elements: Shift all elements in the sorted sublist that are greater than the selected element one position to the right to make space for the selected element.
+
+5. Insert the Element: Insert the selected element into its correct position.
+
+6. Repeat: Repeat steps 2-5 until all elements from the unsorted portion are moved into the sorted sublist.
+
+Example:
+
+Consider sorting the following list in ascending order: [29, 10, 14, 37, 13].
+
+1. Initial List: [29, 10, 14, 37, 13]
+
+Start with the first element 29. The sorted sublist is [29].
+
+2. Second Element: [29, 10, 14, 37, 13]
+
+Take the next element 10. Compare it with 29.
+Since 10 < 29, shift 29 to the right and insert 10.
+List after insertion: [10, 29, 14, 37, 13]
+
+3. Third Element: [10, 29, 14, 37, 13]
+
+Take the next element 14. Compare it with 29.
+Since 14 < 29, shift 29 to the right. Compare 14 with 10.
+Since 14 > 10, insert 14 after 10.
+List after insertion: [10, 14, 29, 37, 13]
+
+4. Fourth Element: [10, 14, 29, 37, 13]
+
+Take the next element 37. Compare it with 29.
+Since 37 > 29, 37 is already in its correct position.
+List remains: [10, 14, 29, 37, 13]
+
+5. Fifth Element: [10, 14, 29, 37, 13]
+
+Take the next element 13. Compare it with 37.
+Since 13 < 37, shift 37 to the right. Compare 13 with 29.
+Since 13 < 29, shift 29 to the right. Compare 13 with 14.
+Since 13 < 14, shift 14 to the right. Compare 13 with 10.
+Since 13 > 10, insert 13 after 10.
+List after insertion: [10, 13, 14, 29, 37]
+
+Approach:
+
+1) Select an element in each iteration from the unsorted array(using a loop).
+2) Place it in its corresponding position in the sorted part and shift the remaining elements accordingly (using an inner loop and swapping).
+3) The “inner while loop” basically shifts the elements using swapping.
+
+Code:
+
+import java.util.*;
+
+public class Main {
+    static void insertion_sort(int[] arr, int n) {
+        for (int i = 0; i <= n - 1; i++) {
+            int j = i;
+            while (j > 0 && arr[j - 1] > arr[j]) {
+                int temp = arr[j - 1];
+                arr[j - 1] = arr[j];
+                arr[j] = temp;
+                j--;
+            }
+        }
+
+        System.out.println("After insertion sort: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+    }
+    public static void main(String args[]) {
+        int arr[] = {13, 46, 24, 52, 20, 9};
+        int n = arr.length;
+        System.out.println("Before Using insertion Sort: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+        insertion_sort(arr, n);
+    }
+
+} 
+

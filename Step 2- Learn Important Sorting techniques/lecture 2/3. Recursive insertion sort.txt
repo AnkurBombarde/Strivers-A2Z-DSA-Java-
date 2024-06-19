@@ -1,0 +1,82 @@
+Problem Statement: Given an array of N integers, write a program to implement the Recursive Insertion Sort algorithm.
+
+Definition:
+Recursive insertion sort is a variation of the insertion sort algorithm, implemented using recursion instead of iterative loops. In this version, the algorithm sorts the array by recursively sorting a smaller subarray and then inserting the current element into its correct position within the sorted subarray.
+Following is the working of recursive insertion sort:
+1. Base Case: The base case for the recursion is when the size of the array (or subarray) is 1. An array with a single element is already sorted.
+
+2. Recursive Case:
+
+(a) Recursively call the insertion sort function on the subarray excluding the last element.
+(b) Insert the last element of the current subarray into its correct position within the sorted subarray.
+
+Example:
+1. Initial List: [64, 34, 25, 12, 22, 11, 90]
+
+2. First Call:
+
+Call the insertion sort function recursively on the subarray excluding the last element: [64, 34, 25, 12, 22, 11].
+
+3. Recursive Calls:
+
+Continue recursively calling the function, reducing the size of the subarray by one each time, until reaching the base case of a single element subarray.
+
+4. Insertion Step:
+
+On each return from the recursive call, insert the excluded last element into its correct position in the sorted subarray.
+For example, after sorting [64, 34, 25, 12, 22, 11], insert 90 in the correct position: [11, 12, 22, 25, 34, 64, 90].
+
+Approach:
+In the iterative method, we did the following:
+
+1. Take an element from the unsorted array(using an outer loop).
+2. Place it in its corresponding position in the sorted part(using an inner loop).
+3. Shift the remaining elements accordingly.
+
+Now, in the recursive approach, we will just select the element recursively instead of using any loop. This is the only change we will do the recursive insertion sort algorithm and the rest of the part will be completely the same as it was in the case of iterative insertion sort.
+
+The approach will be the following:
+
+1. First, call the recursive function with the given array, the size of the array, and the index of the selected element(let's say i).
+2. Inside that recursive function, take the element at index i from the unsorted array.
+3. Then, place the element in its corresponding position in the sorted part(using swapping).
+4. After that, Shift the remaining elements accordingly.
+5. Finally, call the recursion increasing the index(i) by 1.
+6. The recursion will continue until the index reaches n(i.e. All the elements are covered). Base Case: if(i == n) return;
+
+Code:
+import java.util.*;
+
+public class Main {
+    static void insertion_sort(int[] arr, int i, int n) {
+        // Base Case: i == n.
+        if (i == n) return;
+
+        int j = i;
+        while (j > 0 && arr[j - 1] > arr[j]) {
+            int temp = arr[j - 1];
+            arr[j - 1] = arr[j];
+            arr[j] = temp;
+            j--;
+        }
+
+        insertion_sort(arr, i + 1, n);
+
+    }
+    public static void main(String args[]) {
+        int arr[] = {13, 46, 24, 52, 20, 9};
+        int n = arr.length;
+        System.out.println("Before Using insertion Sort: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+        insertion_sort(arr, 0, n);
+        System.out.println("After insertion sort: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+    }
+
+}
