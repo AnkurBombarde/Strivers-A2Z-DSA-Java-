@@ -1,0 +1,181 @@
+Problem Statement: Given an array of integers A and an integer B. Find the total number of subarrays having bitwise XOR of all elements equal to k.
+
+Example 1:
+Input Format: A = [4, 2, 2, 6, 4] , k = 6
+Result: 4
+Explanation: The subarrays having XOR of their elements as 6 are  [4, 2], [4, 2, 2, 6, 4], [2, 2, 6], [6]
+
+Example 2:
+Input Format: A = [5, 6, 7, 8, 9], k = 5
+Result: 2
+Explanation: The subarrays having XOR of their elements as 5 are [5] and [5, 6, 7, 8, 9]
+
+
+Solution 1:Brute-force approach(Naive approach):
+
+Approach:
+Here, in this approach, we are going to generate all possible subarrays to solve this problem.
+
+The steps are as follows:
+
+1. Generate Subarrays: 
+    a) First, we will run a loop(say i) that will select every possible starting index of the subarray. The possible starting indices can vary from index 0 to index n-1(n = size of the array).
+    b) Inside the loop, we will run another loop(say j) that will signify the ending index of the subarray. For every subarray starting from the index i, the possible ending index can vary from index i to n-1(n = size of the array).
+2. Calculate XOR of the subarray: After that for each subarray starting from index i and ending at index j (i.e. arr[i….j]), we will run another loop to calculate the XOR of all the elements(of that particular subarray).
+3. Check the XOR and modify the count: If the XOR is equal to k, we will increase the count by 1.
+
+Code:
+
+
+
+import java.util.*;
+
+public class Main {
+
+    public static int subarraysWithXorK(int []a, int k) {
+        int n = a.length; //size of the given array.
+        int cnt = 0;
+
+        // Step 1: Generating subarrays:
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+
+                //step 2:calculate XOR of all
+                // elements:
+                int xorr = 0;
+                for (int K = i; K <= j; K++) {
+                    xorr = xorr ^ a[K];
+                }
+
+                // step 3:check XOR and count:
+                if (xorr == k) cnt++;
+            }
+        }
+        return cnt;
+    }
+
+    public static void main(String[] args) {
+        int[] a = {4, 2, 2, 6, 4};
+        int k = 6;
+        int ans = subarraysWithXorK(a, k);
+        System.out.println("The number of subarrays with XOR k is: " + ans);
+    }
+}
+Time Complexity: O(N3) approx., where N = size of the array.
+Space Complexity: O(1).
+
+
+Solution 2:
+
+Approach:
+The steps are as follows:
+
+1. Generate Subarrays: 
+    a) First, we will run a loop(say i) that will select every possible starting index of the subarray. The possible starting indices can vary from index 0 to index n-1(n = array size).
+    b) Inside the loop, we will run another loop(say j) that will signify the ending index as well as the current element of the subarray. For every subarray starting from the index i, the possible ending index can vary from index i to n-1(n = size of the array).
+2. Calculate XOR of the subarray: Inside loop j, we will XOR the current element to the XOR of the previous subarray i.e. xorr = XOR(a[i….j-1]) ^ arr[j]. 
+3. Check the XOR and modify the count: After calculating the XOR, we will check if the sum is equal to the given k. If it is, we will increase the value of the count.
+
+Code:
+
+
+
+import java.util.*;
+
+public class Main {
+
+    public static int subarraysWithXorK(int []a, int k) {
+        int n = a.length; //size of the given array.
+        int cnt = 0;
+
+        // Step 1: Generating subarrays:
+        for (int i = 0; i < n; i++) {
+            int xorr = 0;
+            for (int j = i; j < n; j++) {
+
+                //step 2:calculate XOR of all
+                // elements:
+                xorr = xorr ^ a[j];
+
+                // step 3:check XOR and count:
+                if (xorr == k) cnt++;
+            }
+        }
+        return cnt;
+    }
+
+    public static void main(String[] args) {
+        int[] a = {4, 2, 2, 6, 4};
+        int k = 6;
+        int ans = subarraysWithXorK(a, k);
+        System.out.println("The number of subarrays with XOR k is: " + ans);
+    }
+}  
+Time Complexity: O(N2), where N = size of the array.
+Space Complexity: O(1).
+
+
+Solution 3:Optimal approach(Using Hashing):
+
+Approach:
+In this approach, we are going to use the concept of the prefix XOR to solve this problem. Here, the prefix XOR of a subarray ending at index i, simply means the XOR of all the elements of that subarray.
+
+The steps are as follows:
+
+1. First, we will declare a map to store the prefix XORs and their counts.
+2. Then, we will set the value of 0 as 1 on the map.
+3. Then we will run a loop(say i) from index 0 to n-1(n = size of the array).
+4. For each index i, we will do the following:
+    a) We will XOR the current element i.e. arr[i] to the existing prefix XOR.
+    b) Then we will calculate the prefix XOR i.e. xr^k, for which we need the occurrence.
+    c) We will add the occurrence of the prefix XOR xr^k i.e. mpp[xr^k] to our answer.
+    d) Then we will store the current prefix XOR, xr in the map increasing its occurrence by 1.
+
+Code:
+
+
+
+import java.util.*;
+
+public class Main {
+
+    public static int subarraysWithXorK(int []a, int k) {
+        int n = a.length; //size of the given array.
+        int xr = 0;
+        Map<Integer, Integer> mpp = new HashMap<>(); //declaring the map.
+        mpp.put(xr, 1); //setting the value of 0.
+        int cnt = 0;
+
+        for (int i = 0; i < n; i++) {
+            // prefix XOR till index i:
+            xr = xr ^ a[i];
+
+            //By formula: x = xr^k:
+            int x = xr ^ k;
+
+            // add the occurrence of xr^k
+            // to the count:
+            if (mpp.containsKey(x)) {
+                cnt += mpp.get(x);
+            }
+
+            // Insert the prefix xor till index i
+            // into the map:
+            if (mpp.containsKey(xr)) {
+                mpp.put(xr, mpp.get(xr) + 1);
+            } else {
+                mpp.put(xr, 1);
+            }
+        }
+        return cnt;
+    }
+
+    public static void main(String[] args) {
+        int[] a = {4, 2, 2, 6, 4};
+        int k = 6;
+        int ans = subarraysWithXorK(a, k);
+        System.out.println("The number of subarrays with XOR k is: " + ans);
+    }
+}
+Time Complexity: O(N) or O(N*logN) depending on which map data structure we are using, where N = size of the array.
+Space Complexity: O(N) as we are using a map data structure.

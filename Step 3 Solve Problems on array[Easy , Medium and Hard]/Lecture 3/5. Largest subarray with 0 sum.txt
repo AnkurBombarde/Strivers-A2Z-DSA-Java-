@@ -1,0 +1,93 @@
+Problem Statement: Given an array containing both positive and negative integers, we have to find the length of the longest subarray with the sum of all elements equal to zero.
+
+Example 1:
+Input Format: N = 6, array[] = {9, -3, 3, -1, 6, -5}
+Result: 5
+Explanation: The following subarrays sum to zero:
+{-3, 3} , {-1, 6, -5}, {-3, 3, -1, 6, -5}
+Since we require the length of the longest subarray, our answer is 5!
+
+Example 2:
+Input Format: N = 8, array[] = {6, -2, 2, -8, 1, 7, 4, -10}
+Result: 8
+Explanation: Subarrays with sum 0 : {-2, 2}, {-8, 1, 7}, {-2, 2, -8, 1, 7}, {6, -2, 2, -8, 1, 7, 4, -10}
+Length of longest subarray = 8
+
+Solution 1:Brute force approach(Naive approach):
+
+Approach:
+1. Initialize a variable max = 0, which stores the length of the longest subarray with a sum of 0.
+2. Traverse the array from the start and initialize a variable sum = 0 which stores the sum of the subarray starting with the current index
+3. Traverse from the next element of current_index up to the end of the array, each time add the element to the sum and check if it is equal to 0.
+    a) If sum = 0, check if the length of the subarray so far is > max and if yes update max
+4. Now keep adding elements and repeat step 3 a.
+5. After the outer loop traverses all elements return max.
+
+Code:
+import java.util.*;
+
+public class Solution {
+static int solve(int[] a){
+	int  max = 0;
+	for(int i = 0; i < a.length; ++i){
+		int sum = 0;
+		for(int j = i; j < a.length; ++j){
+			sum += a[j];
+			if(sum == 0){
+				max = Math.max(max, j-i+1);
+			}
+		}
+	}
+	return max;
+   }
+
+    public static void main(String args[]) 
+    { 
+        int a[] = {9, -3, 3, -1, 6, -5};
+        System.out.println(solve(a));
+    } 
+}
+
+Time Complexity: O(N^2) 
+Space Complexity: O(1)
+
+
+Solution 2:Optimal approach:
+
+Approach:
+1. First, let us initialize a variable say sum = 0 which stores the sum of elements traversed so far and another variable says max = 0 which stores the length of the longest subarray with sum zero.
+2. Declare a HashMap<Integer, Integer> which stores the prefix sum of every element as a key and its index as a value.
+3. Now traverse the array, and add the array element to our sum. 
+
+Code:
+int maxLen(int A[], int n)
+    {
+        // Your code here
+        HashMap<Integer, Integer> mpp = new HashMap<Integer, Integer>();
+
+        int maxi = 0;
+        int sum = 0; 
+
+        for(int i = 0;i<n;i++) {
+
+            sum += A[i]; 
+
+            if(sum == 0) {
+                maxi = i + 1; 
+            }
+            else {
+                if(mpp.get(sum) != null) {
+
+                    maxi = Math.max(maxi, i - mpp.get(sum)); 
+                }
+                else {
+
+                    mpp.put(sum, i); 
+                }
+            }
+        }
+        return maxi; 
+    }
+
+Time Complexity: O(N).
+Space Complexity: O(N).
