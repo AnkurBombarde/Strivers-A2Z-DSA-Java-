@@ -1,0 +1,186 @@
+Problem Statement: Given an array of N integers. Every number in the array except one appears twice. Find the single number in the array.
+
+Example 1:
+Input Format:
+arr[] = {1,1,2,2,3,3,4,5,5,6,6}
+Result:
+4
+Explanation: Only the number 4 appears once in the array.
+
+Example 2:
+Input Format:
+arr[] = {1,1,3,5,5}
+Result:
+3
+Explanation: Only the number 3 appears once in the array.
+
+Solution 1: Naive approach(Brute Force):
+
+Algorithm:
+The steps are as follows:
+
+1. At first, we will check if the array contains only 1 element. If it is, we will simply return that element.
+2. We will start traversing the array. Then for every element, we will check the following.
+3. If i == 0: If we are at the first index, we will check if the next element is equal.
+    a) If arr[i] != arr[i+1]: This means arr[i] is the single element and so we will return arr[i].
+4. If i == n-1: If we are at the last index, we will check if the previous element is equal.
+    a) If arr[i] != arr[i-1]: This means arr[i] is the single element and so we will return arr[i].
+5. For the elements other than the first and last, we will check:
+    If arr[i] != arr[i-1] and arr[i] != arr[i+1]: If this condition is true for any element, arr[i], we can conclude this is the single element. And we should return arr[i].
+
+Code:
+
+
+
+import java.util.*;
+
+public class Main {
+    public static int singleNonDuplicate(ArrayList<Integer> arr) {
+        int n = arr.size(); // Size of the array.
+        if (n == 1)
+            return arr.get(0);
+
+        for (int i = 0; i < n; i++) {
+            // Check for first index:
+            if (i == 0) {
+                if (!arr.get(i).equals(arr.get(i + 1)))
+                    return arr.get(i);
+            }
+            // Check for last index:
+            else if (i == n - 1) {
+                if (!arr.get(i).equals(arr.get(i - 1)))
+                    return arr.get(i);
+            } else {
+                if (!arr.get(i).equals(arr.get(i - 1)) && !arr.get(i).equals(arr.get(i + 1)))
+                    return arr.get(i);
+            }
+        }
+
+        // Dummy return statement:
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        ArrayList<Integer> arr =
+            new ArrayList<>(Arrays.asList(1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6));
+        int ans = singleNonDuplicate(arr);
+        System.out.println("The single element is: " + ans);
+    }
+}
+Time Complexity: O(N), N = size of the given array.
+Space Complexity: O(1) as we are not using any extra space.
+
+
+Solution 2: Naive approach(Using XOR):
+
+Algorithm:
+
+1. We will declare an ‘ans’ variable initialized with 0.
+2. We will traverse the array and XOR each element with the variable ‘ans’.
+3. After complete traversal, the ‘ans’ variable will store the single element and we will return it.
+
+Code:
+
+
+
+import java.util.*;
+
+public class Main {
+    public static int singleNonDuplicate(ArrayList<Integer> arr) {
+        int n = arr.size(); //size of the array.
+        int ans = 0;
+        // XOR all the elements:
+        for (int i = 0; i < n; i++) {
+            ans = ans ^ arr.get(i);
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        ArrayList<Integer> arr =
+            new ArrayList<>(Arrays.asList(1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6));
+        int ans = singleNonDuplicate(arr);
+        System.out.println("The single element is: " + ans);
+    }
+}
+Time Complexity: O(N), N = size of the given array.
+Space Complexity: O(1) as we are not using any extra space.
+
+
+Solution 3: Optimal approach(Using Binary search):
+
+We are going to use the Binary Search algorithm to optimize the approach.
+
+The primary objective of the Binary Search algorithm is to efficiently determine the appropriate half to eliminate, thereby reducing the search space by half. It does this by determining a specific condition that ensures that the target is not present in that half.
+
+Algorithm:
+
+The steps are as follows:
+
+1. If n == 1: This means the array size is 1. If the array contains only one element, we will return that element only.
+2. If arr[0] != arr[1]: This means the very first element of the array is the single element. So, we will return arr[0].
+3. If arr[n-1] != arr[n-2]: This means the last element of the array is the single element. So, we will return arr[n-1].
+4. Place the 2 pointers i.e. low and high: Initially, we will place the pointers excluding index 0 and n-1 like this: low will point to index 1, and high will point to index n-2 i.e. the second last index.
+5. Calculate the ‘mid’: Now, inside a loop, we will calculate the value of ‘mid’ using the following formula:
+mid = (low+high) // 2 ( ‘//’ refers to integer division)
+6. Check if arr[mid] is the single element:
+If arr[mid] != arr[mid-1] and arr[mid] != arr[mid+1]: If this condition is true for arr[mid], we can conclude arr[mid] is the single element. We will return arr[mid].
+7. If (mid % 2 == 0 and arr[mid] == arr[mid+1])
+or (mid%2 == 1 and arr[mid] == arr[mid-1]): This means we are in the left half and we should eliminate it as our single element appears on the right. So, we will do this:
+low = mid+1.
+8. Otherwise, we are in the right half and we should eliminate it as our single element appears on the left. So, we will do this: high = mid-1.
+
+The steps from 5 to 8 will be inside a loop and the loop will continue until low crosses high.
+
+Code:
+
+
+
+import java.util.*;
+
+public class Main {
+    public static int singleNonDuplicate(ArrayList<Integer> arr) {
+        int n = arr.size(); // Size of the array.
+
+        // Edge cases:
+        if (n == 1)
+            return arr.get(0);
+        if (!arr.get(0).equals(arr.get(1)))
+            return arr.get(0);
+        if (!arr.get(n - 1).equals(arr.get(n - 2)))
+            return arr.get(n - 1);
+
+        int low = 1, high = n - 2;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            // If arr[mid] is the single element:
+            if (!arr.get(mid).equals(arr.get(mid + 1)) && !arr.get(mid).equals(arr.get(mid - 1))) {
+                return arr.get(mid);
+            }
+
+            // We are in the left:
+            if ((mid % 2 == 1 && arr.get(mid).equals(arr.get(mid - 1)))
+                    || (mid % 2 == 0 && arr.get(mid).equals(arr.get(mid + 1)))) {
+                // Eliminate the left half:
+                low = mid + 1;
+            }
+            // We are in the right:
+            else {
+                // Eliminate the right half:
+                high = mid - 1;
+            }
+        }
+
+        // Dummy return statement:
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6));
+        int ans = singleNonDuplicate(arr);
+        System.out.println("The single element is: " + ans);
+    }
+}
+Time Complexity: O(logN), N = size of the given array.
+Space Complexity: O(1) as we are not using any extra space.

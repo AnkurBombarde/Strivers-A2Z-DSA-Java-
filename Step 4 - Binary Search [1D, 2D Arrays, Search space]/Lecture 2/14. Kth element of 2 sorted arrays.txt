@@ -1,0 +1,194 @@
+Problem Statement: Given two sorted arrays of size m and n respectively, you are tasked with finding the element that would be at the kth position of the final sorted array.
+
+Solution 1: 
+
+Approach:
+
+1. We will use a third array i.e. arr3[] of size (m+n) to store the elements of the two sorted arrays.
+2. Now, we will take two pointers i and j, where i points to the first element of arr1[] and j points to the first element of arr2[].
+3. Next, using a while loop( while(i < m && j < n)), we will select two elements i.e. arr1[i] and arr2[j], and consider the smallest one among the two. Then, we will insert the smallest element in the third array and increase that specific pointer by 1.
+    a) If arr1[i] < arr2[j] : Insert arr1[i] into the third array and increase i by 1.
+    b) Otherwise : Insert arr2[j] into the third array and increase j by 1.
+4. After that, the left-out elements from both arrays will be copied as it is into the third array.
+5. Now, the third array i.e. arr3[] will be the sorted merged array. Now the k-th will be the arr3[k-1].
+6. Finally, we will return the value of arr3[k-1].
+
+Code:
+
+import java.util.
+public class Main {
+    public static int kthElement(ArrayList<Integer> a, ArrayList<Integer> b, int m, int n, int k) {
+        ArrayList<Integer> arr3 = new ArrayList<>();
+
+        // apply the merge step:
+        int i = 0, j = 0;
+        while (i < m && j < n) {
+            if (a.get(i) < b.get(j)) arr3.add(a.get(i++));
+            else arr3.add(b.get(j++));
+        }
+
+        // copy the left-out elements:
+        while (i < m) arr3.add(a.get(i++));
+        while (j < n) arr3.add(b.get(j++));
+
+        return arr3.get(k - 1);
+    }
+
+    public static void main(String[] args) {
+        ArrayList<Integer> a = new ArrayList<>();
+        a.add(2); a.add(3); a.add(6); a.add(7); a.add(9);
+
+        ArrayList<Integer> b = new ArrayList<>();
+        b.add(1); b.add(4); b.add(8); b.add(10);
+
+        System.out.println("The k-th element of two sorted arrays is: " +
+                            kthElement(a, b, a.size(), b.size(), 5));
+    }
+}
+Time Complexity: O(m+n), where m and n are the sizes of the given arrays.
+Space Complexity: O(m+n), where m and n are the sizes of the given arrays.
+
+
+Solution 2: 
+
+Approach:
+
+1. We will declare the counter called ‘cnt’ and initialize it with 0.
+2. Now, as usual, we will take two pointers i and j, where i points to the first element of arr1[] and j points to the first element of arr2[].
+3. Next, using a while loop( while(i < m && j < n)), we will select two elements i.e. arr1[i] and arr2[j], and consider the smallest one among the two. Then, we will increase that specific pointer by 1. In addition to that, in each iteration, we will check if the counter ‘cnt’ hits the indicex (k-1). when 'cnt' reaches that index, we will store that particular element. We will also increase the ‘cnt’ by 1 every time regardless of matching the conditions.
+    a) If arr1[i] < arr2[j] : Check ‘cnt’ to perform necessary operations and increase i and ‘cnt’ by 1
+    b) Otherwise : Check ‘cnt’ to perform necessary operations and increase j and ‘cnt’ by 1.
+4. After that, the left-out elements from both arrays will be copied as it is into the third array. While copying we will again check the above-said conditions for the counter, ‘cnt’ and increase it by 1.
+5. Finally, we will return the value of the k-th element stored in the variable.
+
+Code:
+
+import java.util.*;
+
+public class Main {
+    public static int kthElement(ArrayList<Integer> a, ArrayList<Integer> b, int m, int n, int k) {
+        int ele = -1;
+        int cnt = 0; //counter
+        // apply the merge step:
+        int i = 0, j = 0;
+        while (i < m && j < n) {
+            if (a.get(i) < b.get(j)) {
+                if (cnt == k - 1) ele = a.get(i);
+                cnt++;
+                i++;
+            } else {
+                if (cnt == k - 1) ele = b.get(j);
+                cnt++;
+                j++;
+            }
+        }
+
+        // copy the left-out elements:
+        while (i < m) {
+            if (cnt == k - 1) ele = a.get(i);
+            cnt++;
+            i++;
+        }
+        while (j < n) {
+            if (cnt == k - 1) ele = b.get(j);
+            cnt++;
+            j++;
+        }
+
+        return ele;
+    }
+
+    public static void main(String[] args) {
+        ArrayList<Integer> a = new ArrayList<>();
+        a.add(2); a.add(3); a.add(6); a.add(7); a.add(9);
+
+        ArrayList<Integer> b = new ArrayList<>();
+        b.add(1); b.add(4); b.add(8); b.add(10);
+
+        System.out.println("The k-th element of two sorted arrays is: " +
+                            kthElement(a, b, a.size(), b.size(), 5));
+    }
+}
+        
+Time Complexity: O(m+n), where m and n are the sizes of the given arrays.
+Space Complexity: O(1), as we are not using any extra space to solve this problem.
+
+
+Solution 3: Optimal approach(Using binary search):
+
+Algorithm:
+
+1. First, we have to make sure that the arr1[] is the smaller array. If not by default, we will just swap the arrays. Our main goal is to consider the smaller array as arr1[].
+2. Calculate the length of the left half: left = k.
+3. Place the 2 pointers i.e. low and high: Initially, we will place the pointers. The pointer low will point to max(0, k-n2), and the high will point to min(k, n1) (i.e. n1 = The size of the smaller array, n2 = the size of the bigger array).
+4. Calculate the ‘mid1’ i.e. x and ‘mid2’ i.e. left-x: Now, inside the loop, we will calculate the value of ‘mid1’ using the following formula:
+
+    mid1 = (low+high) // 2 ( ‘//’ refers to integer division)
+
+    mid2 = left-mid1
+
+5. Calculate l1, l2, r1, and r2: Generally,
+
+    l1 = arr1[mid1-1]
+    l2 = arr1[mid2-1]
+    r1 = arr1[mid1]
+    r1 = arr1[mid2]
+    The possible values of ‘mid1’ and ‘mid2’ might be 0 and n1 and n2 respectively. So, to handle these cases, we need to store some default values for these four variables. The default value for l1 and l2 will be INT_MIN and for r1 and r2, it will be INT_MAX.
+
+6. Eliminate the halves based on the following conditions:
+
+    If l1 <= r2 && l2 <=r1: We have found the answer. Return max(l1, l2).
+    If l1 > r2: This implies that we have considered more elements from arr1[] than necessary. So, we have to take less elements from arr1[] and more from arr2[]. In such a scenario, we should try smaller values of x. To achieve this, we will eliminate the right half (high = mid1-1).
+    If l2 > r1: This implies that we have considered more elements from arr2[] than necessary. So, we have to take less elements from arr2[] and more from arr1[]. In such a scenario, we should try bigger values of x. To achieve this, we will eliminate the left half (low = mid1+1).
+7. Finally, outside the loop, we will include a dummy return statement just to avoid warnings or errors.
+
+The steps from 4-6 will be inside a loop and the loop will continue until low crosses high.
+
+Code:
+
+import java.util.*;
+
+public class Main {
+    public static int kthElement(ArrayList<Integer> a, ArrayList<Integer> b, int m, int n, int k) {
+        if (m > n) return kthElement(b, a, n, m, k);
+
+        int left = k; // length of left half
+
+        // apply binary search:
+        int low = Math.max(0, k - n), high = Math.min(k, m);
+        while (low <= high) {
+            int mid1 = (low + high) >> 1;
+            int mid2 = left - mid1;
+            // calculate l1, l2, r1, and r2
+            int l1 = Integer.MIN_VALUE, l2 = Integer.MIN_VALUE;
+            int r1 = Integer.MAX_VALUE, r2 = Integer.MAX_VALUE;
+            if (mid1 < m) r1 = a.get(mid1);
+            if (mid2 < n) r2 = b.get(mid2);
+            if (mid1 - 1 >= 0) l1 = a.get(mid1 - 1);
+            if (mid2 - 1 >= 0) l2 = b.get(mid2 - 1);
+
+            if (l1 <= r2 && l2 <= r1) {
+                return Math.max(l1, l2);
+            }
+
+            // eliminate the halves:
+            else if (l1 > r2) high = mid1 - 1;
+            else low = mid1 + 1;
+        }
+        return 0; // dummy statement
+    }
+
+    public static void main(String[] args) {
+        ArrayList<Integer> a = new ArrayList<>();
+        a.add(2); a.add(3); a.add(6); a.add(7); a.add(9);
+
+        ArrayList<Integer> b = new ArrayList<>();
+        b.add(1); b.add(4); b.add(8); b.add(10);
+
+        System.out.println("The k-th element of two sorted arrays is: " +
+                            kthElement(a, b, a.size(), b.size(), 5));
+    }
+}
+Time Complexity: O(log(min(m, n))), where m and n are the sizes of two given arrays.
+Space Complexity: O(1).
+        

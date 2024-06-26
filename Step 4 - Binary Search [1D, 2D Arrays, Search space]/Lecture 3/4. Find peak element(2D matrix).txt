@@ -1,0 +1,63 @@
+Problem Statement: A peak element in a 2D grid is an element that is strictly greater than all of its adjacent neighbors to the left, right, top, and bottom.
+Given a 0-indexed m x n matrix mat where no two adjacent cells are equal, find any peak element mat[i][j] and return the length 2 array [i,j].
+
+You may assume that the entire matrix is surrounded by an outer perimeter with the value -1 in each cell.
+
+Solution: Using binary search:
+
+We are going to use the Binary Search algorithm to optimize the approach.
+
+a) We perform binary search on the columns.
+b) For each column, we find the maximum element in that column.
+c) We compare the maximum element with its neighbors to narrow down the search space.
+d) If the maximum element is a peak, we return its coordinates.
+e) Otherwise, we continue the search in the appropriate half of the matrix.
+
+Algorithm:
+
+1. Initialize the search space to be the entire matrix.
+2. While the search space is not empty:
+    a) Find the middle column (midCol) of the current search space.
+    b) Find the maximum element in that column (maxRow) and its value (maxVal).
+    c) Compare maxVal with its neighbors (left, right, top, and bottom):
+        1) If maxVal is greater than or equal to all its neighbors, it is a peak element. Return [maxRow, midCol].
+        2) Otherwise, narrow the search space by considering only the half where the maximum neighbor lies.
+3. Repeat the process until a peak element is found.
+
+Code:
+class Main {
+    public int[] findPeakGrid(int[][] mat) {
+        int stCol = 0;
+        int endCol = mat[0].length - 1;
+
+        while (stCol <= endCol) {
+            int midCol = stCol + (endCol - stCol) / 2;
+            int maxRow = 0;
+
+            // Find the maximum element in the current column
+            for (int r = 0; r < mat.length; r++) {
+                maxRow = mat[r][midCol] >= mat[maxRow][midCol] ? r : maxRow;
+            }
+
+            // Check neighbors
+            boolean validLeft = midCol - 1 >= stCol && mat[maxRow][midCol - 1] > mat[maxRow][midCol];
+            boolean validRight = midCol + 1 <= endCol && mat[maxRow][midCol + 1] > mat[maxRow][midCol];
+
+            if (validLeft) {
+                endCol = midCol - 1;
+            } else if (validRight) {
+                stCol = midCol + 1;
+            } else {
+                // maxVal is a peak element
+                return new int[]{maxRow, midCol};
+            }
+        }
+
+        // Should not reach here (since there is always a peak element)
+        return null;
+    }
+}
+Time Complexity: O(m log(n)) or O(n log(m)).
+Space Complexity: O(1).
+
+
