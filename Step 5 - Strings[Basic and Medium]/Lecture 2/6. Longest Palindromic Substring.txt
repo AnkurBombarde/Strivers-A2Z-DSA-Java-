@@ -1,0 +1,71 @@
+Problem Statement: Given a string s, return the longest palindromic substring in s
+
+Example 1:
+Input: s = "babad"
+Output: "bab"
+
+Example 2:
+Input: s = "cbbd"
+Output: "bb"
+
+Solution:
+
+Approach:
+
+1. Expand Around Center: This technique checks all potential centers of the palindrome and expands outwards.
+    a) Palindromes can be centered on one character (odd length) or between two characters (even length).
+2. Calculate Lengths: For each center, calculate the maximum length of the palindrome by expanding outwards until the characters no longer match.
+3. Update Longest: Keep track of the start and end indices of the longest palindromic substring found.
+4. Return Result: Extract and return the substring from the original string using the calculated indices.
+
+Algorithm:
+
+1. Initialize variables start and end to track the start and end indicies of the longest palindromic substring found.
+2. For each character in the string, consider it as a potential center for a palindrome.
+3. Use two helper functions:
+    a) One for odd length palindromes.
+    b) One for even length palindromes.
+    c) Expand outward while the characters on both sides are equal.
+4. Calculate the length of the palindrome found by the expansion.
+5. If the length of the current palindrome is greater than the previously recorded longest, update start and end indices.
+6. Use start and end indices to extract the longest palindromic substring from the original string.
+
+Code:
+public class Main {
+
+    public static String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) {
+            return "";
+        }
+
+        int start = 0, end = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expandAroundCenter(s, i, i);
+            int len2 = expandAroundCenter(s, i, i + 1);
+            int len = Math.max(len1, len2);
+
+            if (len > end - start) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+
+        return s.substring(start, end + 1);
+    }
+
+    private static int expandAroundCenter(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
+
+    public static void main(String[] args) {
+        String input = "babad";
+        System.out.println("Longest palindromic substring: " + longestPalindrome(input));
+    }
+}
+Time complexity:O(n^2).
+Space complexity:O(1).

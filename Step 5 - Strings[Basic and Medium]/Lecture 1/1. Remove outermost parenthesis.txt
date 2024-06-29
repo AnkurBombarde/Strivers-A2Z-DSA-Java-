@@ -1,0 +1,51 @@
+Problem Statement:Given a valid parentheses string s, consider its primitive decomposition: s = P1 + P2 + ... + Pk, where Pi are primitive valid parentheses strings.
+A valid parentheses string is either empty "", "(" + A + ")", or A + B, where A and B are valid parentheses strings, and + represents string concatenation.
+A valid parentheses string s is primitive if it is nonempty, and there does not exist a way to split it into s = A + B, with A and B nonempty valid parentheses strings.
+
+Return s after removing the outermost parentheses of every primitive string in the primitive decomposition of s.
+
+Solution:
+
+Algorithm:
+
+1. Initialize an empty list to store the primitive strings.
+2. Initialize a counter balance to keep track of the balance of parentheses.
+3. Initialize an empty string current to store the current primitive string.
+4. Iterate through each character in the input string s:
+    a) If the character is ‘(’, increment balance.
+    b) If the character is ‘)’, decrement balance.
+    c) Append the character to current.
+    d) If balance becomes 0, we have a complete primitive string. Add it to the list and reset current.
+5. Join the primitive strings in the list to form the result.
+
+Code:
+class Main {
+    public String removeOuterParentheses(String s) {
+        List<String> primitives = new ArrayList<>();
+        int balance = 0;
+        StringBuilder current = new StringBuilder();
+
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                balance++;
+            } else if (c == ')') {
+                balance--;
+            }
+            current.append(c);
+
+            if (balance == 0) {
+                primitives.add(current.toString());
+                current.setLength(0); // Reset current
+            }
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (String primitive : primitives) {
+            result.append(primitive.substring(1, primitive.length() - 1));
+        }
+
+        return result.toString();
+    }
+}
+Time complexity: O(n).
+Space complexity: O(n).

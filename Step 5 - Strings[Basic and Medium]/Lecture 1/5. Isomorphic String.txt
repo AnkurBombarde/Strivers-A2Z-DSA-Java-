@@ -1,0 +1,63 @@
+Problem Statement: Given two strings s and t, determine if they are isomorphic.
+
+Definition: Two string 's' and 't' are isomorphic if the characters in 's' can be replaces to get 't'
+
+Note: All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character, but a character may map to itself.
+
+Example 1:
+Input: s = "egg", t = "add"
+Output: true
+
+Example 2:
+Input: s = "foo", t = "bar"
+Output: false
+
+Solution: 
+
+Algorithm:
+
+1. If the lengths of s and t are different, return false.
+2. Create two hash maps: one to store the mapping from characters in s to characters in t (let’s call it s_to_t), and another to store the mapping from characters in t to characters in s (let’s call it t_to_s).
+3. Initialize both hash maps as empty.
+4. Iterate through each character in s and t simultaneously:
+    a) If the current character in s is not present in s_to_t and the current character in t is not present in t_to_s, add the mapping from s to t and from t to s.
+    b) Otherwise, check if the existing mappings match the current characters. If not, return false.
+5. If the loop completes without any mismatches, return true.
+
+Code:
+import java.util.HashMap;
+
+public class Main {
+    public static boolean areIsomorphic(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+        HashMap<Character, Character> s_to_t = new HashMap<>();
+        HashMap<Character, Character> t_to_s = new HashMap<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            char sChar = s.charAt(i);
+            char tChar = t.charAt(i);
+
+            if (!s_to_t.containsKey(sChar) && !t_to_s.containsKey(tChar)) {
+                s_to_t.put(sChar, tChar);
+                t_to_s.put(tChar, sChar);
+            } else {
+                if (s_to_t.getOrDefault(sChar, tChar) != tChar || t_to_s.getOrDefault(tChar, sChar) != sChar) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+        String s = "egg";
+        String t = "add";
+        System.out.println(areIsomorphic(s, t)); // Output: true
+    }
+}
+Time complexity: O(n)
+Space complexity: O(1).

@@ -1,0 +1,89 @@
+Problem Statement: Given a roman numeral, convert it to an integer.
+
+Definition: Roman numerals are represented by seven different symbols:
+Symbol       Value
+I             1
+V             5
+X             10
+L             50
+C             100
+D             500
+M             1000
+Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
+
+a) I can be placed before V (5) and X (10) to make 4 and 9. 
+b) X can be placed before L (50) and C (100) to make 40 and 90. 
+c) C can be placed before D (500) and M (1000) to make 400 and 900.
+
+Example 1:
+Input: s = "III"
+Output: 3
+Explanation: III = 3.
+
+Example 2:
+Input: s = "LVIII"
+Output: 58
+Explanation: L = 50, V= 5, III = 3.
+
+Solution: 
+
+Approach:
+
+1. Create a map of Roman numeral symbols to their integer values.
+2.Traverse the Roman numeral string from right to left.
+3. Use a variable to keep track of the previous numeral's value.
+4. If the current numeral is less than the previous numeral, subtract it from the total (handles cases like IV and IX).
+5. Otherwise, add it to the total.
+6. Accumulate the total value as you iterate through the string.
+
+Algorithm:
+
+1. Initialize a map with Roman numeral symbols and their integer values.
+2. Set total to 0 and prevValue to 0.
+3. Loop through the string from the end to the start:
+    a) Get the current character's value from the map.
+    b) If currentValue is less than prevValue, subtract currentValue from total.
+    c) Otherwise, add currentValue to total.
+    d) Update prevValue to currentValue.
+4. Return total.
+
+Code:
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+
+    public static int romanToInt(String s) {
+        Map<Character, Integer> romanMap = new HashMap<>();
+        romanMap.put('I', 1);
+        romanMap.put('V', 5);
+        romanMap.put('X', 10);
+        romanMap.put('L', 50);
+        romanMap.put('C', 100);
+        romanMap.put('D', 500);
+        romanMap.put('M', 1000);
+
+        int total = 0;
+        int prevValue = 0;
+
+        for (int i = s.length() - 1; i >= 0; i--) {
+            int currentValue = romanMap.get(s.charAt(i));
+            if (currentValue < prevValue) {
+                total -= currentValue;
+            } else {
+                total += currentValue;
+            }
+            prevValue = currentValue;
+        }
+
+        return total;
+    }
+
+    public static void main(String[] args) {
+        String romanNumeral = "MCMXCIV"; // Example input
+        int result = romanToInt(romanNumeral);
+        System.out.println("The integer value of the Roman numeral " + romanNumeral + " is: " + result);
+    }
+}
+Time Complexity:O(n)
+Space Complexity: O(1).

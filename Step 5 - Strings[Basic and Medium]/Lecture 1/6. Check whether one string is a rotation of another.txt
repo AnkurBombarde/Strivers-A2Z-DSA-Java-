@@ -1,0 +1,58 @@
+Problem Statement: Given two strings s and goal, return true if and only if s can become goal after some number of shifts on s.
+A shift on s consists of moving the leftmost character of s to the rightmost position.
+
+Example 1:
+Input: s = "abcde", goal = "cdeab"
+Output: true
+
+Example 2:
+Input: s = "abcde", goal = "abced"
+Output: false
+
+Solution 1: Using Concatenation and Contains:
+
+Approach:
+
+1. We can concatenate the first string with itself and then check if the second string is a substring of the concatenated string.
+2. If it is, then the second string can be formed by shifting the first string.
+3. Otherwise, it cannot.
+
+Below is the Java code implementing this approach:
+
+Code:
+boolean canShiftTo(String s, String goal) {
+    if (s.length() != goal.length()) {
+        return false;
+    }
+    return (s + s).contains(goal);
+}
+Time complexity: O(n*m), where n=length of concatenated string and m=length of the rotation
+Space complexity:O(n)
+
+
+Solution 2: Using Circular shifts:
+
+Approach:
+
+1. We can compare the difference between the characters in both strings.
+2. If the difference is greater than a given value (X), it is not possible to form the second string from the first string.
+3. Otherwise, it is possible.
+
+Below is the Java code implementing this approach:
+
+Code:
+boolean canShiftTo(String s, String goal, int X) {
+    if (s.length() != goal.length()) {
+        return false;
+    }
+    int n = s.length();
+    for (int i = 0; i < n; i++) {
+        int diff = goal.charAt(i) - s.charAt(i);
+        if (Math.abs(diff) > X) {
+            return false;
+        }
+    }
+    return true;
+}
+Time complexity:O(n), where n=length of input string
+Space complexity:O(n).

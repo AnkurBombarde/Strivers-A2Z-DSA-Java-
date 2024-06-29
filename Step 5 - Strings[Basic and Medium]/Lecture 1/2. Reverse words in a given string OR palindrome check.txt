@@ -1,0 +1,128 @@
+Problem Statement: Given a string s, reverse the words of the string.
+
+Example 1:
+Input: s=”this is an amazing program”
+Output: “program amazing an is this”
+
+Example 2:
+Input: s=”This is decent”
+Output: “decent is This”
+
+Solution 1: Brute-Force approach:
+
+Approach:
+
+1. Use a stack to push all the words in a stack
+2. Now, all the words of the string are present in the stack, but in reverse order
+3. Pop elements of the stack one by one and add them to our answer variable. Remember to add a space between the words as well. 
+
+Code:
+import java.util.*;
+class Main
+{
+public static void main(String[] args)
+{
+	String s = "TUF is great for interview preparation";
+	System.out.println("After reversing words: ");
+	System.out.println(s);
+	s += " ";
+	Stack<String> st = new Stack<String>();
+	int i;
+	String str = "";
+	for (i = 0;i < s.length();i++)
+	{
+		if (s.charAt(i) == ' ')
+		{
+			st.push(str);
+			str = "";
+		}
+		else
+		{
+			str += s.charAt(i);
+		}
+	}
+	String ans = "";
+	while (st.size() != 1)
+	{
+		ans += st.peek() + " ";
+		st.pop();
+	}
+	ans += st.peek(); // The last word should'nt have a space after it
+	System.out.println("After reversing words: ");
+	System.out.print(ans);
+}
+}
+Time Complexity: O(N), Traversing the entire string
+Space Complexity: O(N)
+
+Solution 2: Optimal approach:
+
+Approach:
+
+1. We start traversing the string from the end until we hit a space. It indicates that we have gone past a word and now we need to store it.
+2. We check if our answer variable is empty or not
+3. If it’s empty, it indicates that this is the last word we need to print, and hence, there shouldn’t be any space after this word.
+4. If it’s empty we add it to our result with a space after it. 
+
+Code:
+import java.io.*;
+class Main
+{
+static private String result(String s)
+{
+	int left = 0;
+	int right = s.length() - 1;
+
+	String temp = "";
+	String ans = "";
+
+	//Iterate the string and keep on adding to form a word
+	//If empty space is encountered then add the current word to the result
+	while (left <= right)
+	{
+		char ch = s.charAt(left);
+		if (ch != ' ')
+		{
+			temp += ch;
+		}
+		else if (ch == ' ')
+		{
+			if (!ans.equals(""))
+			{
+				ans = temp + " " + ans;
+			}
+			else
+			{
+				ans = temp;
+			}
+			temp = "";
+		}
+		left++;
+	}
+
+	//If not empty string then add to the result(Last word is added)
+	if (!temp.equals(""))
+	{
+		if (!ans.equals(""))
+		{
+			ans = temp + " " + ans;
+		}
+		else
+		{
+			ans = temp;
+		}
+	}
+
+	return ans;
+}
+public static void main(String[] args)
+{
+	String st = "TUF is great for interview preparation";
+	System.out.println("Before reversing words: ");
+    System.out.println(st);
+    System.out.println("After reversing words: ");
+	System.out.print(result(st));
+}
+}
+Time Complexity: O(N), N~length of string
+Space Complexity: O(1).

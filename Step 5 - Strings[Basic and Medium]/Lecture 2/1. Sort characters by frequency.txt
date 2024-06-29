@@ -1,0 +1,68 @@
+Problem Statement: Given a string s, sort it in decreasing order based on the frequency of the characters. The frequency of a character is the number of times it appears in the string.
+
+Return the sorted string. If there are multiple answers, return any of them.
+
+Example 1:
+Input: s = "tree"
+Output: "eert"
+Explanation: 'e' appears twice while 'r' and 't' both appear once.
+So 'e' must appear before both 'r' and 't'. Therefore "eetr" is also a valid answer.
+
+Example 2:
+Input: s = "cccaaa"
+Output: "aaaccc"
+Explanation: Both 'c' and 'a' appear three times, so both "cccaaa" and "aaaccc" are valid answers.
+Note that "cacaca" is incorrect, as the same characters must be together.
+
+Solution:
+
+Approach:
+
+1. Count Frequencies: Use a HashMap to store the frequency of each character in the string.
+2. Sort Characters: Use a PriorityQueue (max heap) or sort the entries of the HashMap based on the frequencies in descending order.
+3. Build Result: Construct the result string by appending characters based on their frequencies.
+
+Algorithm:
+
+1. Initialize a HashMap<Character, Integer> to store the frequency of each character.
+2. Traverse the string and populate the frequency map.
+3. Convert the frequency map to a list of entries and sort it based on frequency in descending order.
+4. Initialize a StringBuilder to build the result string.
+5. Append each character to the StringBuilder based on its frequency.
+6. Convert the StringBuilder to a string and return it.
+
+Code:
+import java.util.*;
+
+public class Solution {
+    public static String frequencySort(String s) {
+        // Step 1: Count the frequency of each character
+        Map<Character, Integer> frequencyMap = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            frequencyMap.put(c, frequencyMap.getOrDefault(c, 0) + 1);
+        }
+
+        // Step 2: Create a list of the map entries and sort them by frequency in descending order
+        List<Map.Entry<Character, Integer>> entryList = new ArrayList<>(frequencyMap.entrySet());
+        entryList.sort((a, b) -> b.getValue() - a.getValue());
+
+        // Step 3: Build the result string
+        StringBuilder result = new StringBuilder();
+        for (Map.Entry<Character, Integer> entry : entryList) {
+            char character = entry.getKey();
+            int frequency = entry.getValue();
+            for (int i = 0; i < frequency; i++) {
+                result.append(character);
+            }
+        }
+
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        String s = "tree";
+        System.out.println(frequencySort(s)); // Output can be "eert" or "rtee" depending on sorting stability
+    }
+}
+Time Complexity:O(n), where n=length of the string
+Space Complexity:O(n)
